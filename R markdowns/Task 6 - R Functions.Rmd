@@ -1,0 +1,45 @@
+---
+title: "Task 6 - R Functions"
+author: "Bowen Tan"
+date: "2026-10-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load CO2 data for test
+data(CO2)
+```
+
+## 1. Write a function that calculates the ratio of the mean and the median of a given vector.
+
+```{r}
+mean_by_median <- function(x) {
+  mean(x)/median(x)
+}
+
+# Test
+mean_by_median(CO2$uptake)
+```
+
+## 2. Write a function that ignores the lowest and the highest value from a given vector and calculate the mean. 
+
+```{r}
+mean_without_max_min <- function(x) {
+  mean(x[-c(which.max(x), which.min(x))])
+}
+
+# Test
+mean_without_max_min(CO2$uptake)
+```
+
+## 3. Read about piping from here:https://r4ds.had.co.nz/pipes.html#pipes. Write a short (max. 300 characters, no spaces) explanation of why, how, and when not to use pipes. 
+
+Pipes pass output of one step to the next, making code more readable by showing workflow left-to-right. Use pipes when transforming data in clear sequential steps. not to use pipes for very short tasks, multiple inputs or outputs, or complex branching.
+
+## 4. Familiarize yourself with the apply-family of functions (apply, lapply, sapply etc.) http://uc-r.github.io/apply_family Write a short explanation (max. 300 characters, no spaces) of why they could be useful in your work. 
+
+I am working for allergy research by studying a large birth cohort with lots of variables, the apply-family of functions can save time, reduce manual errors, and make gene, biomarker, or exposure data processing more efficient and reproducible.
