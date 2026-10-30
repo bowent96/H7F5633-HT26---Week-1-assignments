@@ -1,0 +1,161 @@
+---
+title: "Task 7 - Basic visualization with R"
+author: "Bowen Tan"
+date: "2026-10-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load packages
+
+```{r message=FALSE}
+library(tidyverse)
+```
+
+## 1. Compare the distributions of the body heights of the two species from the 'magic_guys.csv' dataset graphically
+
+### a. using the basic 'hist' function as well as ‘ggplot’ and ‘geom_histogram’ functions from the ggplot2 package. Optimize the plots for example by trying several different 'breaks'. Note that ggplot2-based functions give you many more options for changing the visualization parameters, try some of them. 
+
+```{r}
+# Load dataset
+df1 <- read.csv("Week 1 - data for Task 7/magic_guys.csv")
+
+# Plot with "hist"
+hist(df1$length[df1$species == "jedi"],
+     breaks = 10,
+     col = "skyblue")
+
+hist(df1$length[df1$species == "sith"],
+     breaks = 10,
+     col = "lightgreen")
+
+# Plot with ggplot2
+p1 <- ggplot(df1, aes(x = length, fill = species)) +
+  geom_histogram(bins = 10, color = "black") +
+  facet_wrap(~species) +
+  theme_minimal()
+
+p2 <- ggplot(df1, aes(x = length, fill = species)) +
+  geom_histogram(bins = 20, color = "black") +
+  facet_wrap(~species) +
+  theme_minimal()
+
+p1
+p2
+```
+
+### b. Do the same comparison as in a. but with boxplots. If you want to use the ggplot2-package, use the functions ‘ggplot’ and ‘geom_boxplot’. 
+
+```{r}
+p3 <- ggplot(df1, aes(x = species, y = length, fill = species)) +
+  geom_boxplot(color = "black") +
+  theme_minimal()
+
+p3
+```
+
+### c. Save the plots with the ‘png’, ‘pdf’, and ‘svg’ formats. In which situation would you use which file format? 
+
+```{r}
+# Save as png
+ggsave("histogram.png", plot = p2)
+ggsave("boxplot.png", plot = p3)
+
+# Save as pdf
+ggsave("histogram.pdf", plot = p2)
+ggsave("boxplot.pdf", plot = p3)
+
+# Save as svg
+ggsave("histogram.svg", plot = p2)
+ggsave("boxplot.svg", plot = p3)
+```
+
+PNG is suitable for presentations, web pages, and reports because it provides high-quality raster images that are widely supported. PDF is preferable for scientific publications and printing because it stores graphics as vectors. SVG is also a vector format and is particularly useful for web graphics and further editing in vector graphic software such as  Adobe Illustrator, but it is less commonly required by scientific journals.
+
+## 2. Load the gene expression data matrix from the ‘microarray_data.tab’ dataset provided in the shared folder, it is a big tabular separated matrix.  
+
+### a. How big is the matrix in terms of rows and columns?  
+
+```{r}
+# Load dataset
+df2 <- read.delim("Week 1 - data for Task 7/microarray_data.tab")
+
+# Check for numbers of rows and columns
+dim(df2)
+```
+
+There are 553 rows and 1000 columns in the matrix.
+
+### b. Count the missing values per gene and visualize this result. 
+
+```{r}
+# Count the missing values per gene
+na_per_gene <- colSums(is.na(df2))
+
+# Visualization
+barplot(na_per_gene)
+```
+
+### c. Find the genes for which there are more than X% (X=10%, 20%, 50%) missing values.
+
+```{r}
+# Percentage of missing values per gene
+na_percentage <- colMeans(is.na(df2)) * 100
+
+# More than X%
+genes_10 <- names(na_percentage[na_percentage > 10])
+genes_20 <- names(na_percentage[na_percentage > 20])
+genes_50 <- names(na_percentage[na_percentage > 50])
+
+genes_10
+genes_20
+genes_50
+```
+
+### d. Replace the missing values by the average expression value for the particular gene. (Note: Imputing data has to be used with caution!)  
+
+```{r}
+df2_imputed <- as.data.frame(
+  lapply(df2, function(x) {
+    x[is.na(x)] <- mean(x, na.rm = TRUE)
+    x
+  })
+)
+
+# Check NA left
+sum(is.na(df2_imputed))
+18802/553
+```
+
+There are 34 genes with all missing values.
+
+## 3. Visualize the data in the CO2 dataset in a way that gives you a deeper understanding of the data. What do you see?  
+
+```{r}
+# Load dataset
+data(CO2)
+
+# Uptake by plant
+ggplot(CO2, aes(x = Plant, y = uptake, fill = Plant)) +
+  geom_boxplot(color = "black") +
+  theme_minimal()
+
+# Uptake by type
+ggplot(CO2, aes(x = Type, y = uptake, fill = Type)) +
+  geom_boxplot(color = "black") +
+  theme_minimal()
+
+# Uptake by treatment
+ggplot(CO2, aes(x = Treatment, y = uptake, fill = Treatment)) +
+  geom_boxplot(color = "black") +
+  theme_minimal()
+```
+
+For plant, Qn3 has the highest CO2 uptake. The order from high to low is Qn, Qc, Mn, Mc.
+
+For type, Quebec has higher CO2 uptake than Mississippi.
+
+For treatment, nonchiiled treatment has higher CO2 uptake than chilled treatment.
