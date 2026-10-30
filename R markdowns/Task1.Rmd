@@ -1,0 +1,30 @@
+---
+title: "Task 1 - Literature"
+output:
+  html_document:
+    df_print: paged
+---
+
+Literature: A single-cell atlas of transcribed cis-regulatory elements in the human genome (10.1101/2023.11.13.566791)
+
+<h3><b>What is the medically relevant insight from the article?<b><h3>  
+
+The main medical value is cell-type-resolved interpretation of non-coding GWAS signals. Most disease-associated variants sit outside genes, so it is usually unclear which cell type they act in and which gene they regulate. By linking heritability to transcribed regulatory elements in individual cells, the paper narrows each locus down to a cell population, a regulatory element, a target promoter, and sometimes a disrupted transcription factor motif.
+
+<h3><b>Which genomics technology/ technologies were used?<b><h3>
+
+Single-cell 3′ and 5′ RNA-seq; Single-cell ATAC-seq; Bulk CAGE, RNA-seq and ATAC-seq library construction and sequencing for DMFB and 540 iPSC; Computational methods like SCAFE (tCRE calling), Cell Ranger, Seurat/scanpy, CellBender, Scrublet, bbknn/Harmony, SEACells (meta-cells), cNMF (modules), Cicero (co-activity), chromVAR and motifbreakR (motifs), stratified LD score regression (LDSC and LDSC-SEG), fgsea, and PLINK.
+
+<h3><b>List and explain at least three questions/ hypotheses you can think of that extend the analysis presented in the paper.<b><h3>
+
+1.Do genetic variants alter tCRE activity and promoter usage in a cell-type-specific way? 
+
+The hypothesis is that tCRE-QTLs and promoter-usage QTLs explain GWAS loci that gene-level eQTLs miss. Variants in alternative promoters or enhancers can change which isoform is made without changing total expression, so bulk and gene-level eQTL colocalization would miss them.
+
+2.Do disease states show disease-specific tCRE usage that the healthy atlas cannot capture? 
+
+The atlas is mostly built from non-diseased tissue. The hypothesis is that inflamed, fibrotic or activated cell states (synovium in RA, gut in Crohn’s, skin in psoriasis) use distinct tCREs and modules, and that risk-associated modules shift in usage in patients versus controls. This would turn heritability enrichment into a mechanism that is visible in disease.
+
+3.Does the heritability enrichment generalize across ancestry and development? 
+
+The atlas draws on mostly Japanese donors plus public data, and on adult tissue. The hypothesis is that enrichments and cell-type assignments partly differ in non-East-Asian GWAS and that developmental tCREs explain additional heritability for pediatric-onset or congenital traits.
